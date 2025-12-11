@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trends - Nisify</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1 class="logo">Nisify</h1>
+            <p class="tagline">NIST CSF 2.0 Compliance Dashboard</p>
+        </div>
+        <div class="global-search">
+            <span class="global-search-icon">&#128269;</span>
+            <input type="text"
+                   id="global-search-input"
+                   class="global-search-input"
+                   placeholder="Search controls, gaps, evidence..."
+                   autocomplete="off">
+            <span class="global-search-shortcut">Ctrl+K</span>
+            <div id="search-results"></div>
+        </div>
+        <button id="dark-mode-btn" class="dark-mode-toggle" onclick="toggleDarkMode()" title="Toggle dark mode">&#9789;</button>
+        <nav class="nav">
+            <a href="/" class="nav-link">Home</a>
+            <a href="/dashboard" class="nav-link">Dashboard</a>
+            <a href="/gaps" class="nav-link">Gap Analysis</a>
+            <a href="/evidence" class="nav-link">Evidence</a>
+            <a href="/trends" class="nav-link active">Trends</a>
+        </nav>
+    </header>
+
+    <main class="main">
+        <section class="page-header">
+            <h2>Historical Trends</h2>
+            <div class="refresh-controls">
+                <span id="last-refresh">Last refresh: --:--:--</span>
+                <button class="btn-small" onclick="refreshCurrentPage()">&#8635; Refresh</button>
+                <button class="btn-small" id="auto-refresh-btn" onclick="toggleAutoRefresh()">Auto: Off</button>
+                <div class="export-dropdown">
+                    <button class="export-btn">&#8681; Export</button>
+                    <div class="export-dropdown-content">
+                        <button onclick="exportTrendsData('csv')">Export CSV</button>
+                        <button onclick="exportTrendsData('json')">Export JSON</button>
+                    </div>
+                </div>
+            </div>
+            <p class="subtitle">{{organization}} - Last updated: {{last_updated}}</p>
+        </section>
+
+        <section class="trend-summary">
+            <div class="trend-overview">
+                <div class="trend-card">
+                    <span class="trend-direction" id="overall-direction">--</span>
+                    <span class="trend-label">Overall Trend</span>
+                </div>
+                <div class="trend-card">
+                    <span class="trend-value" id="trend-delta">--</span>
+                    <span class="trend-label">Score Change</span>
+                </div>
+                <div class="trend-card">
+                    <span class="trend-value" id="trend-period">--</span>
+                    <span class="trend-label">Period Analyzed</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="trend-chart-section">
+            <h3>Overall Maturity Over Time</h3>
+            <div class="chart-container">
+                <canvas id="overall-trend-chart" width="800" height="300"></canvas>
+            </div>
+            <p class="chart-note" id="chart-note">Chart shows maturity score changes over time</p>
+        </section>
+
+        <section class="function-trends-section">
+            <h3>Function Trends</h3>
+            <div class="function-trends-grid" id="function-trends-grid">
+                <!-- Populated by JavaScript -->
+            </div>
+        </section>
+
+        <section class="control-changes-section">
+            <h3>Control Status Changes</h3>
+            <div class="changes-summary">
+                <div class="change-stat improving">
+                    <span class="change-count" id="improving-count">0</span>
+                    <span class="change-label">Improving</span>
+                </div>
+                <div class="change-stat stable">
+                    <span class="change-count" id="stable-count">0</span>
+                    <span class="change-label">Stable</span>
+                </div>
+                <div class="change-stat regressing">
+                    <span class="change-count" id="regressing-count">0</span>
+                    <span class="change-label">Regressing</span>
+                </div>
+                <div class="change-stat volatile">
+                    <span class="change-count" id="volatile-count">0</span>
+                    <span class="change-label">Volatile</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="improving-controls-section">
+            <h3>Improving Controls</h3>
+            <p class="section-desc">Controls showing consistent improvement</p>
+            <div class="controls-list" id="improving-list">
+                <!-- Populated by JavaScript -->
+            </div>
+        </section>
+
+        <section class="regressing-controls-section">
+            <h3>Regressing Controls</h3>
+            <p class="section-desc">Controls that may need attention</p>
+            <div class="controls-list" id="regressing-list">
+                <!-- Populated by JavaScript -->
+            </div>
+        </section>
+
+        <section class="statistics-section">
+            <h3>Trend Statistics</h3>
+            <div class="stats-grid" id="trend-stats">
+                <!-- Populated by JavaScript -->
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>Nisify - NIST CSF 2.0 Compliance Evidence Aggregator</p>
+        <p class="footer-note">Dashboard is read-only and runs locally only</p>
+    </footer>
+
+    <script src="/static/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            initDarkMode();
+            initRefreshControls();
+            initGlobalSearch();
+            loadTrendsData();
+            handleHashHighlight();
+        });
+    </script>
+</body>
+</html>

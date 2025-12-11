@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evidence Browser - Nisify</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1 class="logo">Nisify</h1>
+            <p class="tagline">NIST CSF 2.0 Compliance Dashboard</p>
+        </div>
+        <div class="global-search">
+            <span class="global-search-icon">&#128269;</span>
+            <input type="text"
+                   id="global-search-input"
+                   class="global-search-input"
+                   placeholder="Search controls, gaps, evidence..."
+                   autocomplete="off">
+            <span class="global-search-shortcut">Ctrl+K</span>
+            <div id="search-results"></div>
+        </div>
+        <button id="dark-mode-btn" class="dark-mode-toggle" onclick="toggleDarkMode()" title="Toggle dark mode">&#9789;</button>
+        <nav class="nav">
+            <a href="/" class="nav-link">Home</a>
+            <a href="/dashboard" class="nav-link">Dashboard</a>
+            <a href="/gaps" class="nav-link">Gap Analysis</a>
+            <a href="/evidence" class="nav-link active">Evidence</a>
+            <a href="/trends" class="nav-link">Trends</a>
+        </nav>
+    </header>
+
+    <main class="main">
+        <section class="page-header">
+            <h2>Evidence Browser</h2>
+            <div class="refresh-controls">
+                <span id="last-refresh">Last refresh: --:--:--</span>
+                <button class="btn-small" onclick="refreshCurrentPage()">&#8635; Refresh</button>
+                <button class="btn-small" id="auto-refresh-btn" onclick="toggleAutoRefresh()">Auto: Off</button>
+                <div class="export-dropdown">
+                    <button class="export-btn">&#8681; Export</button>
+                    <div class="export-dropdown-content">
+                        <button onclick="exportEvidenceData('csv')">Export CSV</button>
+                        <button onclick="exportEvidenceData('json')">Export JSON</button>
+                    </div>
+                </div>
+            </div>
+            <p class="subtitle">{{organization}} - Last updated: {{last_updated}}</p>
+        </section>
+
+        <section class="evidence-stats">
+            <div class="stats-row" id="evidence-stats">
+                <div class="stat-card">
+                    <span class="stat-value" id="total-evidence">--</span>
+                    <span class="stat-label">Total Evidence Items</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="platforms-count">--</span>
+                    <span class="stat-label">Platforms</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="types-count">--</span>
+                    <span class="stat-label">Evidence Types</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="last-collection">--</span>
+                    <span class="stat-label">Last Collection</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="platform-overview">
+            <h3>Evidence by Platform</h3>
+            <div class="platform-grid" id="platform-grid">
+                <!-- Populated by JavaScript -->
+            </div>
+        </section>
+
+        <section class="evidence-browser">
+            <h3>Browse Evidence</h3>
+            <div class="filter-bar">
+                <label for="platform-filter">Platform:</label>
+                <select id="platform-filter" onchange="filterEvidence()">
+                    <option value="">All Platforms</option>
+                    <!-- Populated by JavaScript -->
+                </select>
+                <label for="type-filter">Evidence Type:</label>
+                <select id="type-filter" onchange="filterEvidence()">
+                    <option value="">All Types</option>
+                    <!-- Populated by JavaScript -->
+                </select>
+                <button class="btn" onclick="refreshEvidence()">Refresh</button>
+            </div>
+            <div class="evidence-table-container">
+                <table class="data-table" id="evidence-table">
+                    <thead>
+                        <tr>
+                            <th class="sortable" onclick="sortEvidence('platform')">Platform</th>
+                            <th class="sortable" onclick="sortEvidence('evidence_type')">Type</th>
+                            <th class="sortable" onclick="sortEvidence('collected_at')">Collected</th>
+                            <th>Hash</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="evidence-tbody">
+                        <!-- Populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="pagination" id="pagination">
+                <button class="btn" id="prev-btn" onclick="prevPage()" disabled>Previous</button>
+                <span id="page-info">Page 1</span>
+                <button class="btn" id="next-btn" onclick="nextPage()">Next</button>
+            </div>
+        </section>
+
+        <section class="collection-runs">
+            <h3>Recent Collection Runs</h3>
+            <div class="runs-table-container">
+                <table class="data-table" id="runs-table">
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>Platform</th>
+                            <th>Status</th>
+                            <th>Duration</th>
+                            <th>Items Collected</th>
+                        </tr>
+                    </thead>
+                    <tbody id="runs-tbody">
+                        <!-- Populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="manual-evidence">
+            <h3>Submit Manual Evidence</h3>
+            <div class="info-card">
+                <p>For controls requiring manual evidence (policies, audit reports, training records), use the CLI:</p>
+                <pre class="code-block">nisify submit --control GV.PO-01 --type policy_document \
+  --url "https://sharepoint/security-policy.pdf" \
+  --description "Information Security Policy v3.0"</pre>
+                <p style="margin-top: 1rem;">Or submit a file directly:</p>
+                <pre class="code-block">nisify submit --control GV.RR-01 --type board_minutes \
+  --file board-meeting-q4.pdf \
+  --description "Q4 2024 Security Review"</pre>
+                <p style="margin-top: 1rem;">List available evidence types:</p>
+                <pre class="code-block">nisify submit --list-types</pre>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>Nisify - NIST CSF 2.0 Compliance Evidence Aggregator</p>
+        <p class="footer-note">Dashboard is read-only and runs locally only</p>
+    </footer>
+
+    <div class="modal" id="evidence-modal" style="display: none;">
+        <div class="modal-content modal-large">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <h3 id="modal-title">Evidence Details</h3>
+            <div id="modal-body">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            initDarkMode();
+            initRefreshControls();
+            initGlobalSearch();
+            loadEvidenceData();
+            handleHashHighlight();
+        });
+    </script>
+</body>
+</html>

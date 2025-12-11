@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Nisify</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1 class="logo">Nisify</h1>
+            <p class="tagline">NIST CSF 2.0 Compliance Dashboard</p>
+        </div>
+        <div class="global-search">
+            <span class="global-search-icon">&#128269;</span>
+            <input type="text"
+                   id="global-search-input"
+                   class="global-search-input"
+                   placeholder="Search controls, gaps, evidence..."
+                   autocomplete="off">
+            <span class="global-search-shortcut">Ctrl+K</span>
+            <div id="search-results"></div>
+        </div>
+        <button id="dark-mode-btn" class="dark-mode-toggle" onclick="toggleDarkMode()" title="Toggle dark mode">&#9789;</button>
+        <nav class="nav">
+            <a href="/" class="nav-link">Home</a>
+            <a href="/dashboard" class="nav-link active">Dashboard</a>
+            <a href="/gaps" class="nav-link">Gap Analysis</a>
+            <a href="/evidence" class="nav-link">Evidence</a>
+            <a href="/trends" class="nav-link">Trends</a>
+        </nav>
+    </header>
+
+    <main class="main">
+        <section class="page-header">
+            <h2>Maturity Dashboard</h2>
+            <div class="refresh-controls">
+                <span id="last-refresh">Last refresh: --:--:--</span>
+                <button class="btn-small" onclick="refreshCurrentPage()">&#8635; Refresh</button>
+                <button class="btn-small" id="auto-refresh-btn" onclick="toggleAutoRefresh()">Auto: Off</button>
+                <div class="export-dropdown">
+                    <button class="export-btn">&#8681; Export</button>
+                    <div class="export-dropdown-content">
+                        <button onclick="exportMaturityData('csv')">Export CSV</button>
+                        <button onclick="exportMaturityData('json')">Export JSON</button>
+                    </div>
+                </div>
+            </div>
+            <p class="subtitle">{{organization}} - Last updated: {{last_updated}}</p>
+        </section>
+
+        <section class="overall-maturity">
+            <div class="maturity-display">
+                <div class="maturity-score-large">
+                    <span class="score-value" id="overall-score">{{overall_score}}</span>
+                    <span class="score-max">/ 4.0</span>
+                </div>
+                <div class="maturity-level">
+                    <span class="level-label">Level</span>
+                    <span class="level-value" id="overall-level">{{overall_level}}</span>
+                </div>
+            </div>
+            <div class="maturity-bar-container">
+                <div class="maturity-bar" id="overall-bar" style="width: 0%"></div>
+            </div>
+            <p class="evidence-note">Based on <span id="evidence-count">{{evidence_count}}</span> evidence items</p>
+        </section>
+
+        <section class="functions-section">
+            <h3>Maturity by Function</h3>
+            <div class="functions-grid" id="functions-grid">
+                <!-- Populated by JavaScript -->
+            </div>
+        </section>
+
+        <section class="categories-section">
+            <h3>Category Breakdown</h3>
+            <div class="filter-bar">
+                <label for="function-filter">Filter by function:</label>
+                <select id="function-filter" onchange="filterCategories()">
+                    <option value="">All Functions</option>
+                    <option value="GV">GV - Govern</option>
+                    <option value="ID">ID - Identify</option>
+                    <option value="PR">PR - Protect</option>
+                    <option value="DE">DE - Detect</option>
+                    <option value="RS">RS - Respond</option>
+                    <option value="RC">RC - Recover</option>
+                </select>
+            </div>
+            <div class="categories-table-container">
+                <table class="data-table" id="categories-table">
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Score</th>
+                            <th>Level</th>
+                            <th>Progress</th>
+                            <th>Subcategories</th>
+                        </tr>
+                    </thead>
+                    <tbody id="categories-tbody">
+                        <!-- Populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="subcategories-section">
+            <h3>Subcategory Details</h3>
+            <div class="filter-bar">
+                <label for="category-filter">Filter by category:</label>
+                <select id="category-filter" onchange="filterSubcategories()">
+                    <option value="">All Categories</option>
+                </select>
+                <label for="level-filter">Minimum level:</label>
+                <select id="level-filter" onchange="filterSubcategories()">
+                    <option value="">Any Level</option>
+                    <option value="0">Level 0+</option>
+                    <option value="1">Level 1+</option>
+                    <option value="2">Level 2+</option>
+                    <option value="3">Level 3+</option>
+                    <option value="4">Level 4</option>
+                </select>
+            </div>
+            <div class="subcategories-table-container">
+                <table class="data-table" id="subcategories-table">
+                    <thead>
+                        <tr>
+                            <th>Control ID</th>
+                            <th>Score</th>
+                            <th>Level</th>
+                            <th>Evidence</th>
+                            <th>Confidence</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody id="subcategories-tbody">
+                        <!-- Populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="statistics-section">
+            <h3>Statistics</h3>
+            <div class="stats-grid" id="stats-grid">
+                <!-- Populated by JavaScript -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Control Detail Modal -->
+    <div id="control-modal" class="modal" style="display: none;">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h3 id="control-modal-title">Control Details</h3>
+                <button class="modal-close" onclick="closeControlModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="control-modal-body">
+                <div class="control-loading">Loading control details...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Evidence Detail Modal -->
+    <div id="evidence-modal" class="modal" style="display: none;">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h3 id="evidence-modal-title">Evidence Details</h3>
+                <button class="modal-close" onclick="closeEvidenceModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="evidence-modal-body">
+                <div class="evidence-loading">Loading evidence...</div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>Nisify - NIST CSF 2.0 Compliance Evidence Aggregator</p>
+        <p class="footer-note">Dashboard is read-only and runs locally only</p>
+    </footer>
+
+    <script src="/static/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            initDarkMode();
+            initRefreshControls();
+            initGlobalSearch();
+            loadDashboardData();
+            handleHashHighlight();
+        });
+    </script>
+</body>
+</html>

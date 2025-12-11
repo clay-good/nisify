@@ -1,0 +1,24 @@
+# Nisify - NIST CSF 2.0 Compliance Evidence Aggregator
+# Core dependencies - pinned for reproducibility
+
+# HTTP client for REST API calls
+requests==2.31.0
+
+# AWS SDK - required for AWS collector
+boto3==1.34.34
+
+# Cryptography for credential encryption
+cryptography==41.0.7
+
+# YAML configuration parsing
+pyyaml==6.0.1
+
+# Optional: PDF report generation
+# weasyprint==60.2
+
+# Optional: Snowflake collector
+# snowflake-connector-python==3.6.0
+
+# Optional: Google Workspace collector
+# google-api-python-client==2.111.0
+# google-auth==2.25.2

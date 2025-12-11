@@ -1,0 +1,75 @@
+# Nisify Configuration Example
+# Copy this file to ~/.nisify/config.yaml and customize for your environment.
+#
+# Sensitive credentials (API tokens, passwords) are stored separately in
+# an encrypted credentials file. Use 'nisify configure' to set them up.
+
+nisify:
+  # Directory for storing evidence and database files
+  data_dir: ~/.nisify/data
+
+  # Logging verbosity: DEBUG, INFO, WARNING, ERROR
+  log_level: INFO
+
+platforms:
+  # AWS Configuration
+  # Required permissions: SecurityAudit managed policy (read-only)
+  aws:
+    enabled: false
+    profile: default
+    regions:
+      - us-east-1
+      - us-west-2
+
+  # Okta Configuration
+  # Required permissions: okta.users.read, okta.logs.read, okta.policies.read
+  okta:
+    enabled: false
+    domain: your-org.okta.com
+    # API token stored in encrypted credentials file
+
+  # Jamf Pro Configuration
+  # Required permissions: Auditor role or read-only API client
+  jamf:
+    enabled: false
+    url: https://your-org.jamfcloud.com
+    # Client credentials stored in encrypted credentials file
+
+  # Google Workspace Configuration
+  # Required permissions: Admin SDK Reports API (read), Directory API (read)
+  # Requires service account with domain-wide delegation
+  google:
+    enabled: false
+    customer_id: your-customer-id
+    service_account_path: ~/.nisify/google-service-account.json
+
+  # Snowflake Configuration
+  # Required permissions: SELECT on SNOWFLAKE.ACCOUNT_USAGE schema
+  # Note: Queries consume compute credits
+  snowflake:
+    enabled: false
+    account: your-account
+    warehouse: COMPUTE_WH
+    # Credentials stored in encrypted credentials file
+
+  # Datadog Configuration
+  # Required permissions: Read-only API key and application key
+  datadog:
+    enabled: false
+    site: datadoghq.com  # or datadoghq.eu for EU
+    # API keys stored in encrypted credentials file
+
+collection:
+  # Schedule for automated collection: hourly, daily, weekly
+  schedule: daily
+
+  # How long to retain evidence (in days)
+  # Maturity snapshots are retained indefinitely for trend analysis
+  retention_days: 365
+
+reporting:
+  # Company name for report headers
+  company_name: Your Company Name
+
+  # Directory for generated reports
+  output_dir: ~/.nisify/reports

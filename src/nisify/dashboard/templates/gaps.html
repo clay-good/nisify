@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gap Analysis - Nisify</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1 class="logo">Nisify</h1>
+            <p class="tagline">NIST CSF 2.0 Compliance Dashboard</p>
+        </div>
+        <div class="global-search">
+            <span class="global-search-icon">&#128269;</span>
+            <input type="text"
+                   id="global-search-input"
+                   class="global-search-input"
+                   placeholder="Search controls, gaps, evidence..."
+                   autocomplete="off">
+            <span class="global-search-shortcut">Ctrl+K</span>
+            <div id="search-results"></div>
+        </div>
+        <button id="dark-mode-btn" class="dark-mode-toggle" onclick="toggleDarkMode()" title="Toggle dark mode">&#9789;</button>
+        <nav class="nav">
+            <a href="/" class="nav-link">Home</a>
+            <a href="/dashboard" class="nav-link">Dashboard</a>
+            <a href="/gaps" class="nav-link active">Gap Analysis</a>
+            <a href="/evidence" class="nav-link">Evidence</a>
+            <a href="/trends" class="nav-link">Trends</a>
+        </nav>
+    </header>
+
+    <main class="main">
+        <section class="page-header">
+            <h2>Gap Analysis</h2>
+            <div class="refresh-controls">
+                <span id="last-refresh">Last refresh: --:--:--</span>
+                <button class="btn-small" onclick="refreshCurrentPage()">&#8635; Refresh</button>
+                <button class="btn-small" id="auto-refresh-btn" onclick="toggleAutoRefresh()">Auto: Off</button>
+                <div class="export-dropdown">
+                    <button class="export-btn">&#8681; Export</button>
+                    <div class="export-dropdown-content">
+                        <button onclick="exportGapsData('csv')">Export CSV</button>
+                        <button onclick="exportGapsData('json')">Export JSON</button>
+                    </div>
+                </div>
+            </div>
+            <p class="subtitle">{{organization}} - Last updated: {{last_updated}}</p>
+        </section>
+
+        <section class="gap-summary">
+            <div class="summary-row">
+                <div class="summary-stat">
+                    <span class="stat-value" id="total-gaps">{{gap_count}}</span>
+                    <span class="stat-label">Total Gaps</span>
+                </div>
+                <div class="summary-stat critical">
+                    <span class="stat-value" id="critical-gaps">{{critical_gaps}}</span>
+                    <span class="stat-label">Critical</span>
+                </div>
+                <div class="summary-stat high">
+                    <span class="stat-value" id="high-gaps">0</span>
+                    <span class="stat-label">High</span>
+                </div>
+                <div class="summary-stat medium">
+                    <span class="stat-value" id="medium-gaps">0</span>
+                    <span class="stat-label">Medium</span>
+                </div>
+                <div class="summary-stat low">
+                    <span class="stat-value" id="low-gaps">0</span>
+                    <span class="stat-label">Low</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="quick-wins-section">
+            <h3>Quick Wins</h3>
+            <p class="section-desc">Low-effort improvements with high impact</p>
+            <div class="quick-wins-list" id="quick-wins-list">
+                <!-- Populated by JavaScript -->
+            </div>
+        </section>
+
+        <section class="critical-gaps-section">
+            <h3>Critical Gaps</h3>
+            <p class="section-desc">Require immediate attention</p>
+            <div class="critical-gaps-list" id="critical-gaps-list">
+                <!-- Populated by JavaScript -->
+            </div>
+        </section>
+
+        <section class="all-gaps-section">
+            <h3>All Gaps</h3>
+            <div class="filter-bar">
+                <label for="priority-filter">Priority:</label>
+                <select id="priority-filter" onchange="filterGaps()">
+                    <option value="">All Priorities</option>
+                    <option value="critical">Critical</option>
+                    <option value="high">High</option>
+                    <option value="medium">Medium</option>
+                    <option value="low">Low</option>
+                </select>
+                <label for="function-filter">Function:</label>
+                <select id="function-filter" onchange="filterGaps()">
+                    <option value="">All Functions</option>
+                    <option value="GV">GV - Govern</option>
+                    <option value="ID">ID - Identify</option>
+                    <option value="PR">PR - Protect</option>
+                    <option value="DE">DE - Detect</option>
+                    <option value="RS">RS - Respond</option>
+                    <option value="RC">RC - Recover</option>
+                </select>
+                <label for="type-filter">Gap Type:</label>
+                <select id="type-filter" onchange="filterGaps()">
+                    <option value="">All Types</option>
+                    <option value="no_evidence">No Evidence</option>
+                    <option value="stale_evidence">Stale Evidence</option>
+                    <option value="partial_evidence">Partial Evidence</option>
+                    <option value="low_maturity">Low Maturity</option>
+                </select>
+            </div>
+            <div class="gaps-table-container">
+                <table class="data-table" id="gaps-table">
+                    <thead>
+                        <tr>
+                            <th class="sortable" onclick="sortGaps('control_id')">Control ID</th>
+                            <th class="sortable" onclick="sortGaps('priority')">Priority</th>
+                            <th class="sortable" onclick="sortGaps('gap_type')">Type</th>
+                            <th>Current Level</th>
+                            <th>Target Level</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="gaps-tbody">
+                        <!-- Populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="recommendations-section">
+            <h3>Top Recommendations</h3>
+            <div class="recommendations-list" id="recommendations-list">
+                <!-- Populated by JavaScript -->
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>Nisify - NIST CSF 2.0 Compliance Evidence Aggregator</p>
+        <p class="footer-note">Dashboard is read-only and runs locally only</p>
+    </footer>
+
+    <div class="modal" id="gap-modal" style="display: none;">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <h3 id="modal-title">Gap Details</h3>
+            <div id="modal-body">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            initDarkMode();
+            initRefreshControls();
+            initGlobalSearch();
+            loadGapsData();
+            handleHashHighlight();
+        });
+    </script>
+</body>
+</html>

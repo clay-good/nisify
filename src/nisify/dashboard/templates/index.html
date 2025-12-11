@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nisify - NIST CSF 2.0 Compliance Dashboard</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1 class="logo">Nisify</h1>
+            <p class="tagline">NIST CSF 2.0 Compliance Dashboard</p>
+        </div>
+        <div class="global-search">
+            <span class="global-search-icon">&#128269;</span>
+            <input type="text"
+                   id="global-search-input"
+                   class="global-search-input"
+                   placeholder="Search controls, gaps, evidence..."
+                   autocomplete="off">
+            <span class="global-search-shortcut">Ctrl+K</span>
+            <div id="search-results"></div>
+        </div>
+        <button id="dark-mode-btn" class="dark-mode-toggle" onclick="toggleDarkMode()" title="Toggle dark mode">&#9789;</button>
+        <nav class="nav">
+            <a href="/" class="nav-link active">Home</a>
+            <a href="/dashboard" class="nav-link">Dashboard</a>
+            <a href="/gaps" class="nav-link">Gap Analysis</a>
+            <a href="/evidence" class="nav-link">Evidence</a>
+            <a href="/trends" class="nav-link">Trends</a>
+        </nav>
+    </header>
+
+    <main class="main">
+        <section class="hero page-header">
+            <h2>{{organization}} Compliance Status</h2>
+            <div class="refresh-controls">
+                <span id="last-refresh">Last refresh: --:--:--</span>
+                <button class="btn-small" onclick="refreshCurrentPage()">↻ Refresh</button>
+                <button class="btn-small" id="auto-refresh-btn" onclick="toggleAutoRefresh()">Auto: Off</button>
+            </div>
+            <p class="subtitle">Last updated: {{last_updated}}</p>
+        </section>
+
+        <section class="summary-cards" id="summary-cards">
+            <div class="card">
+                <h3>Overall Maturity</h3>
+                <div class="big-number" id="overall-score">--</div>
+                <p class="card-label">Level <span id="overall-level">--</span> of 4</p>
+            </div>
+            <div class="card">
+                <h3>Evidence Items</h3>
+                <div class="big-number" id="evidence-count">--</div>
+                <p class="card-label">Collected across platforms</p>
+            </div>
+            <div class="card">
+                <h3>Gaps Identified</h3>
+                <div class="big-number" id="gap-count">--</div>
+                <p class="card-label"><span id="critical-gaps">--</span> critical</p>
+            </div>
+            <div class="card">
+                <h3>Trend</h3>
+                <div class="big-number" id="trend-direction">--</div>
+                <p class="card-label">Over last 90 days</p>
+            </div>
+        </section>
+
+        <section class="quick-links">
+            <h3>Quick Actions</h3>
+            <div class="link-grid">
+                <a href="/dashboard" class="link-card">
+                    <h4>View Dashboard</h4>
+                    <p>Detailed maturity scores by function, category, and control</p>
+                </a>
+                <a href="/gaps" class="link-card">
+                    <h4>Review Gaps</h4>
+                    <p>See compliance gaps and recommended actions</p>
+                </a>
+                <a href="/evidence" class="link-card">
+                    <h4>Browse Evidence</h4>
+                    <p>Explore collected evidence by platform and type</p>
+                </a>
+                <a href="/trends" class="link-card">
+                    <h4>View Trends</h4>
+                    <p>Track compliance posture over time</p>
+                </a>
+            </div>
+        </section>
+
+        <section class="functions-preview" id="functions-preview">
+            <h3>Function Summary</h3>
+            <div class="function-bars" id="function-bars">
+                <!-- Populated by JavaScript -->
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>Nisify - NIST CSF 2.0 Compliance Evidence Aggregator</p>
+        <p class="footer-note">Dashboard is read-only and runs locally only</p>
+    </footer>
+
+    <script src="/static/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            initDarkMode();
+            initRefreshControls();
+            initGlobalSearch();
+            loadIndexData();
+            handleHashHighlight();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+{
+    "id": "sample-aws-findings-001",
+    "platform": "aws",
+    "evidence_type": "security_findings",
+    "collected_at": "2024-01-15T02:00:00Z",
+    "raw_data": {
+        "findings": [
+            {
+                "id": "arn:aws:securityhub:us-east-1:123456789012:finding/example-001",
+                "product_arn": "arn:aws:securityhub:us-east-1::product/aws/securityhub",
+                "generator_id": "aws-foundational-security-best-practices/v/1.0.0/IAM.4",
+                "title": "IAM root user access key should not exist",
+                "description": "This control checks whether the root user access key is available.",
+                "severity": {
+                    "label": "CRITICAL",
+                    "normalized": 90
+                },
+                "compliance": {
+                    "status": "PASSED",
+                    "status_reasons": []
+                },
+                "workflow": {
+                    "status": "RESOLVED"
+                },
+                "record_state": "ACTIVE",
+                "created_at": "2023-06-01T10:00:00Z",
+                "updated_at": "2024-01-10T08:00:00Z",
+                "resources": [
+                    {
+                        "type": "AwsAccount",
+                        "id": "AWS::::Account:123456789012",
+                        "region": "us-east-1"
+                    }
+                ]
+            },
+            {
+                "id": "arn:aws:securityhub:us-east-1:123456789012:finding/example-002",
+                "product_arn": "arn:aws:securityhub:us-east-1::product/aws/securityhub",
+                "generator_id": "aws-foundational-security-best-practices/v/1.0.0/S3.1",
+                "title": "S3 Block Public Access setting should be enabled",
+                "description": "This control checks whether the S3 Block Public Access settings are configured at the account level.",
+                "severity": {
+                    "label": "MEDIUM",
+                    "normalized": 40
+                },
+                "compliance": {
+                    "status": "PASSED",
+                    "status_reasons": []
+                },
+                "workflow": {
+                    "status": "RESOLVED"
+                },
+                "record_state": "ACTIVE",
+                "created_at": "2023-08-15T14:00:00Z",
+                "updated_at": "2024-01-12T09:00:00Z",
+                "resources": [
+                    {
+                        "type": "AwsAccount",
+                        "id": "AWS::::Account:123456789012",
+                        "region": "us-east-1"
+                    }
+                ]
+            },
+            {
+                "id": "arn:aws:securityhub:us-east-1:123456789012:finding/example-003",
+                "product_arn": "arn:aws:securityhub:us-east-1::product/aws/securityhub",
+                "generator_id": "aws-foundational-security-best-practices/v/1.0.0/CloudTrail.1",
+                "title": "CloudTrail should be enabled and configured with at least one multi-Region trail",
+                "description": "This control checks that there is at least one multi-Region CloudTrail trail.",
+                "severity": {
+                    "label": "HIGH",
+                    "normalized": 70
+                },
+                "compliance": {
+                    "status": "FAILED",
+                    "status_reasons": [
+                        {
+                            "reason_code": "CONFIG_MISSING_DATA",
+                            "description": "Multi-region trail not found"
+                        }
+                    ]
+                },
+                "workflow": {
+                    "status": "NEW"
+                },
+                "record_state": "ACTIVE",
+                "created_at": "2024-01-05T10:00:00Z",
+                "updated_at": "2024-01-15T01:00:00Z",
+                "resources": [
+                    {
+                        "type": "AwsAccount",
+                        "id": "AWS::::Account:123456789012",
+                        "region": "us-east-1"
+                    }
+                ]
+            }
+        ],
+        "summary": {
+            "total_findings": 3,
+            "by_severity": {
+                "CRITICAL": 1,
+                "HIGH": 1,
+                "MEDIUM": 1,
+                "LOW": 0,
+                "INFORMATIONAL": 0
+            },
+            "by_compliance_status": {
+                "PASSED": 2,
+                "FAILED": 1,
+                "WARNING": 0,
+                "NOT_AVAILABLE": 0
+            }
+        }
+    },
+    "metadata": {
+        "collector_version": "1.0.0",
+        "region": "us-east-1",
+        "account_id": "123456789012",
+        "collection_duration_seconds": 5.1
+    }
+}

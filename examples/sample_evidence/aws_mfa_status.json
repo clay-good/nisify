@@ -1,0 +1,59 @@
+{
+    "id": "sample-aws-mfa-001",
+    "platform": "aws",
+    "evidence_type": "mfa_status",
+    "collected_at": "2024-01-15T02:00:00Z",
+    "raw_data": {
+        "users": [
+            {
+                "user_name": "admin",
+                "user_id": "AIDAEXAMPLE1",
+                "arn": "arn:aws:iam::123456789012:user/admin",
+                "mfa_enabled": true,
+                "mfa_devices": [
+                    {
+                        "serial_number": "arn:aws:iam::123456789012:mfa/admin",
+                        "enable_date": "2023-06-15T10:30:00Z"
+                    }
+                ],
+                "password_last_used": "2024-01-14T15:30:00Z",
+                "create_date": "2022-03-01T09:00:00Z"
+            },
+            {
+                "user_name": "developer1",
+                "user_id": "AIDAEXAMPLE2",
+                "arn": "arn:aws:iam::123456789012:user/developer1",
+                "mfa_enabled": true,
+                "mfa_devices": [
+                    {
+                        "serial_number": "arn:aws:iam::123456789012:mfa/developer1",
+                        "enable_date": "2023-08-20T14:00:00Z"
+                    }
+                ],
+                "password_last_used": "2024-01-15T01:00:00Z",
+                "create_date": "2023-01-15T11:00:00Z"
+            },
+            {
+                "user_name": "service-account",
+                "user_id": "AIDAEXAMPLE3",
+                "arn": "arn:aws:iam::123456789012:user/service-account",
+                "mfa_enabled": false,
+                "mfa_devices": [],
+                "password_last_used": null,
+                "create_date": "2023-05-10T08:00:00Z"
+            }
+        ],
+        "summary": {
+            "total_users": 3,
+            "mfa_enabled_count": 2,
+            "mfa_disabled_count": 1,
+            "mfa_coverage_percentage": 66.67
+        }
+    },
+    "metadata": {
+        "collector_version": "1.0.0",
+        "region": "us-east-1",
+        "account_id": "123456789012",
+        "collection_duration_seconds": 2.5
+    }
+}

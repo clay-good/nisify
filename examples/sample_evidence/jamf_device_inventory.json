@@ -1,0 +1,88 @@
+{
+    "id": "sample-jamf-devices-001",
+    "platform": "jamf",
+    "evidence_type": "device_inventory",
+    "collected_at": "2024-01-15T02:00:00Z",
+    "raw_data": {
+        "computers": [
+            {
+                "id": 1,
+                "name": "CORP-MBP-001",
+                "serial_number": "C02EXAMPLE01",
+                "udid": "00000000-0000-0000-0000-000000000001",
+                "model": "MacBook Pro (14-inch, 2023)",
+                "model_identifier": "Mac14,5",
+                "os_name": "macOS",
+                "os_version": "14.2.1",
+                "os_build": "23C71",
+                "last_contact_time": "2024-01-15T01:30:00Z",
+                "last_enrolled_date": "2023-01-10T09:00:00Z",
+                "managed": true,
+                "supervised": true,
+                "assigned_user": {
+                    "username": "jdoe",
+                    "email": "jane.doe@example.com",
+                    "full_name": "Jane Doe"
+                },
+                "hardware": {
+                    "processor_type": "Apple M2 Pro",
+                    "total_ram_mb": 16384,
+                    "storage_mb": 512000
+                },
+                "security": {
+                    "filevault_enabled": true,
+                    "filevault_recovery_key_escrowed": true,
+                    "firewall_enabled": true,
+                    "gatekeeper_status": "enabled",
+                    "sip_status": "enabled",
+                    "xprotect_version": "2178"
+                }
+            },
+            {
+                "id": 2,
+                "name": "CORP-MBP-002",
+                "serial_number": "C02EXAMPLE02",
+                "udid": "00000000-0000-0000-0000-000000000002",
+                "model": "MacBook Air (M2, 2022)",
+                "model_identifier": "Mac14,2",
+                "os_name": "macOS",
+                "os_version": "14.1",
+                "os_build": "23B74",
+                "last_contact_time": "2024-01-14T22:00:00Z",
+                "last_enrolled_date": "2023-06-15T14:00:00Z",
+                "managed": true,
+                "supervised": true,
+                "assigned_user": {
+                    "username": "admin",
+                    "email": "admin@example.com",
+                    "full_name": "Admin User"
+                },
+                "hardware": {
+                    "processor_type": "Apple M2",
+                    "total_ram_mb": 8192,
+                    "storage_mb": 256000
+                },
+                "security": {
+                    "filevault_enabled": true,
+                    "filevault_recovery_key_escrowed": true,
+                    "firewall_enabled": true,
+                    "gatekeeper_status": "enabled",
+                    "sip_status": "enabled",
+                    "xprotect_version": "2178"
+                }
+            }
+        ],
+        "summary": {
+            "total_computers": 2,
+            "managed_count": 2,
+            "supervised_count": 2,
+            "filevault_enabled_count": 2,
+            "filevault_coverage_percentage": 100.0
+        }
+    },
+    "metadata": {
+        "collector_version": "1.0.0",
+        "jamf_url": "https://example.jamfcloud.com",
+        "collection_duration_seconds": 3.2
+    }
+}

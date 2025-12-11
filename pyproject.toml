@@ -1,0 +1,113 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nisify"
+version = "0.1.0"
+description = "NIST CSF 2.0 compliance evidence aggregator - Testify to your NIST maturity with evidence to prove it"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.11"
+authors = []
+keywords = [
+    "nist",
+    "compliance",
+    "csf",
+    "security",
+    "evidence",
+    "audit",
+    "governance",
+    "risk",
+    "cybersecurity"
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Security",
+    "Topic :: System :: Systems Administration",
+    "Typing :: Typed",
+]
+dependencies = [
+    "requests>=2.31.0,<3.0.0",
+    "boto3>=1.34.0,<2.0.0",
+    "cryptography>=41.0.0,<43.0.0",
+    "pyyaml>=6.0.1,<7.0.0",
+]
+
+[project.optional-dependencies]
+pdf = [
+    "weasyprint>=60.0,<62.0",
+]
+snowflake = [
+    "snowflake-connector-python>=3.6.0,<4.0.0",
+]
+google = [
+    "google-api-python-client>=2.111.0,<3.0.0",
+    "google-auth>=2.25.0,<3.0.0",
+]
+all = [
+    "nisify[pdf,snowflake,google]",
+]
+dev = [
+    "mypy>=1.8.0",
+    "ruff>=0.1.9",
+]
+
+[project.scripts]
+nisify = "nisify.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/clay-good/nisify"
+Repository = "https://github.com/clay-good/nisify"
+Documentation = "https://github.com/clay-good/nisify/tree/main/docs"
+Issues = "https://github.com/clay-good/nisify/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+nisify = ["py.typed"]
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+strict = true
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "UP",  # pyupgrade
+    "S",   # flake8-bandit (security)
+]
+ignore = [
+    "E501",  # line too long (handled by formatter)
+    "S110",  # try-except-pass - acceptable for optional features
+    "S607",  # subprocess partial path - we use standard OS commands
+    "S603",  # subprocess untrusted input - commands are hardcoded
+    "S608",  # SQL injection - we use parameterized queries with placeholders
+    "B904",  # raise-without-from - acceptable for exception chaining
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S101", "S105", "S108"]  # allow assert, test passwords, and temp file paths
+"src/nisify/config/credentials.py" = ["S101"]  # asserts for session state validation
+"src/nisify/collectors/zoom_collector.py" = ["S105"]  # false positive on token_url

@@ -1,0 +1,87 @@
+{
+    "id": "sample-okta-users-001",
+    "platform": "okta",
+    "evidence_type": "user_inventory",
+    "collected_at": "2024-01-15T02:00:00Z",
+    "raw_data": {
+        "users": [
+            {
+                "id": "00u1example1",
+                "status": "ACTIVE",
+                "created": "2022-01-15T10:00:00Z",
+                "activated": "2022-01-15T10:05:00Z",
+                "last_login": "2024-01-14T18:30:00Z",
+                "last_updated": "2024-01-10T09:00:00Z",
+                "profile": {
+                    "login": "admin@example.com",
+                    "email": "admin@example.com",
+                    "firstName": "Admin",
+                    "lastName": "User",
+                    "department": "IT",
+                    "title": "System Administrator"
+                },
+                "credentials": {
+                    "provider": {
+                        "type": "OKTA",
+                        "name": "OKTA"
+                    }
+                }
+            },
+            {
+                "id": "00u1example2",
+                "status": "ACTIVE",
+                "created": "2023-03-20T14:00:00Z",
+                "activated": "2023-03-20T14:10:00Z",
+                "last_login": "2024-01-15T01:45:00Z",
+                "last_updated": "2024-01-05T11:00:00Z",
+                "profile": {
+                    "login": "jane.doe@example.com",
+                    "email": "jane.doe@example.com",
+                    "firstName": "Jane",
+                    "lastName": "Doe",
+                    "department": "Engineering",
+                    "title": "Senior Developer"
+                },
+                "credentials": {
+                    "provider": {
+                        "type": "OKTA",
+                        "name": "OKTA"
+                    }
+                }
+            },
+            {
+                "id": "00u1example3",
+                "status": "SUSPENDED",
+                "created": "2022-06-10T09:00:00Z",
+                "activated": "2022-06-10T09:15:00Z",
+                "last_login": "2023-12-01T10:00:00Z",
+                "last_updated": "2024-01-02T08:00:00Z",
+                "profile": {
+                    "login": "former.employee@example.com",
+                    "email": "former.employee@example.com",
+                    "firstName": "Former",
+                    "lastName": "Employee",
+                    "department": "Sales",
+                    "title": "Account Executive"
+                },
+                "credentials": {
+                    "provider": {
+                        "type": "OKTA",
+                        "name": "OKTA"
+                    }
+                }
+            }
+        ],
+        "summary": {
+            "total_users": 3,
+            "active_users": 2,
+            "suspended_users": 1,
+            "deprovisioned_users": 0
+        }
+    },
+    "metadata": {
+        "collector_version": "1.0.0",
+        "domain": "example.okta.com",
+        "collection_duration_seconds": 1.8
+    }
+}
