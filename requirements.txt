@@ -8,7 +8,7 @@ requests==2.33.0
 boto3==1.34.34
 
 # Cryptography for credential encryption
-cryptography==48.0.1
+cryptography==50.0.0
 
 # YAML configuration parsing
 pyyaml==6.0.1
